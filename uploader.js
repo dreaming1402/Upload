@@ -173,7 +173,8 @@ function Uploader(_options) {
 		    	me.AddFile(file);
 		    });
 	    } else {
-	    	me.AddFile($files[0]);
+	    	if (files.length > 0)
+	    		me.AddFile(files[0]);
 	    };
 
 		if (defaults.afterDrop)
@@ -186,7 +187,8 @@ function Uploader(_options) {
 		    	me.AddFile(file);
 		    });
 	    } else {
-	    	me.AddFile($files[0]);
+	    	if (files.length > 0)
+	    		me.AddFile(files[0]);
 	    };
 
 	    // Clear input-handler
@@ -227,7 +229,7 @@ function Uploader(_options) {
 
         // Thêm vào dropzone
         if (!defaults.multiFile)
-        	dropzone.find('.'+fileCls+'-container:not(.'+fileCls+'-container.demo)').remove();
+        	dropzone.find('.'+defaults.fileCls+'-container:not(.'+defaults.fileCls+'-container.demo)').remove();
         dropzone.append(file);
 
         // Cập nhập output
@@ -398,6 +400,8 @@ function Uploader(_options) {
 
 				error(data.message+' "'+file.name+'"');
 
+				uploadBusy = false;
+
 		        // calback event
 		        if (defaults.afterUploadSuccess)
 		            window[defaults.afterUploadSuccess]({data: data, textStatus: textStatus, jqXHR: jqXHR});
@@ -408,6 +412,8 @@ function Uploader(_options) {
 
 				error('Upload bị lỗi "'+file.name+'"');
 				if (defaults.debug) console.log(errorThrown);
+
+				uploadBusy = false;
 
 				// calback event
 		        if (defaults.afterUploadError)
